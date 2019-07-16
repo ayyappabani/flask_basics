@@ -1,7 +1,11 @@
----- 
+---
+- name: Create File!
+  hosts: all
+ 
   tasks:
-      - name: Create file
-        win_file:
-            path: c:\temp\yallo12.config  
-            state: touch
-        register: "file created"
+ 
+  - name: Create file!
+    win_file:
+         path: c:\temp\yallo12.config
+         state: touch
+    register: "file created"
