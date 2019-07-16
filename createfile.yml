@@ -1,5 +1,6 @@
 ---
   tasks:
+  hosts: all
       - name: Create file
         win_file:
             path: c:\temp\yallo11.config  
