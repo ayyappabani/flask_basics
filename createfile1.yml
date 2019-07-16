@@ -1,0 +1,9 @@
+---
+- name: create file!
+  hosts: all
+  
+      - name: Create file
+        win_file:
+            path: c:\temp\yallo12.config  
+            state: touch
+        register: "file created"
