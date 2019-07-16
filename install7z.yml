@@ -6,5 +6,5 @@
   tasks:
  
   - name: Install 7z!
-     win_command: C:\Windows\System32\msiexec.exe /i C:\temp\7z.msi /qn /norestart  
+    win_command: C:\Windows\System32\msiexec.exe /i C:\temp\7z.msi /qn /norestart  
     register: "7z installed"
