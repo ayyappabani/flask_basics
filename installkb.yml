@@ -1,0 +1,14 @@
+---
+- name: Install Kb!
+  hosts: all
+  gather_facts: no
+ 
+  tasks:
+ 
+  - name: Install hotfix!
+    win_hotfix:
+         hotfix_kb: KB3172729
+         source: C:\temp\KB3172729.msu
+         state: present   
+    register: hotfix_result
+ 
