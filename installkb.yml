@@ -9,6 +9,6 @@
     win_hotfix:
          hotfix_kb: KB3172729
          source: C:\temp\KB3172729.msu
-         state: absent   
+         state: present   
     register: hotfix_result
  
