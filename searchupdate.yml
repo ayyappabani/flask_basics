@@ -6,7 +6,7 @@
   tasks:
  
   – name: Check for missing updates
-    win_updates: 
-        state=searched
+    win_updates: state=searched
     register: update_count
+  - debug: var=update_count
     
