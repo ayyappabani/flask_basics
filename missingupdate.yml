@@ -10,10 +10,9 @@
     register: update_count
   - name: debug
     vars:
- 
        msg: |
             found_update_count:------>  {{ update_count.found_update_count }}
             installed_update_count:------> {{ update_count.installed_update_count }}
             Reboot_required:------> {{ update_count.reboot_required }}
-     debug:
+    debug:
         msg: "{{ msg.split('\n') }}"
