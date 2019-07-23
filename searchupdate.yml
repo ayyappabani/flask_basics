@@ -7,7 +7,7 @@
  
   – name: Check for missing updates
     win_updates: 
-         state:searched
+         state: searched
     register: update_count
   - debug: var=update_count
     
