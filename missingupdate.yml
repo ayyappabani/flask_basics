@@ -1,0 +1,19 @@
+---
+- name: searchupdate!
+  hosts: all
+  gather_facts: no
+ 
+  tasks:
+  
+  - name: check for missing updates
+    win_updates: state=searched
+    register: update_count
+  - name: debug
+    vars:
+ 
+       msg: |
+            found_update_count:------>  {{ update_count.found_update_count }}
+            installed_update_count:------> {{ update_count.installed_update_count }}
+            Reboot_required:------> {{ update_count.reboot_required }}
+     debug:
+        msg: "{{ msg.split('\n') }}"
