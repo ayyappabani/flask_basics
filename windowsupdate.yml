@@ -4,11 +4,7 @@
   hosts: all
   gather_facts: no
   any_errors_fatal: false
-  serial:
-     - 1
-     - 5%
-     - 25%
-  max_fail_percentage: 10%
+  
   vars:
     win_updates_categories:
          - CriticalUpdates
