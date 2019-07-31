@@ -21,3 +21,19 @@
       category_names: "{{ win_updates_categories }}"
     register: update_count
     ignore_errors: yes
+  
+  - name: Reboot if needed
+    win_shell: Restart-Computer -Force
+    when: update_count.reboot_required
+    ignore_errors: yes
+    
+  - name: Install missing updates.
+    win_updates:
+      category_names: "{{ win_updates_categories }}"
+    register: update_result
+    
+  - name: Reboot if needed
+    win_shell: Restart-Computer -Force
+    when: update_result.reboot_required
+    ignore_errors: yes  
+  
