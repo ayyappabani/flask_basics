@@ -1,0 +1,18 @@
+- hosts: all
+  remote_user: root
+  become: true
+  vars:
+    users:
+      - "shiva"
+      - "rama"
+
+  tasks:
+
+    - name: create user shiva  on remote host
+      user: 
+        name : "{{ item }}"
+        password: <stMcEic2imya6>
+        group: "wheel"
+        update_password: always
+      register: user_created
+      with_items: "{{ users }}"
