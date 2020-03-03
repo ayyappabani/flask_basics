@@ -1,0 +1,14 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  tasks:
+    - name: install single package using package module
+      package:
+        name: vim
+        state: present
+
+    - name: install multiple package using package module
+      package:
+        name: [ 'vim', 'wget', 'curl' ]
+        state: present
