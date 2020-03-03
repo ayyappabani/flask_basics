@@ -1,0 +1,16 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  tasks:
+
+    - name: download rpm from url
+      get_url:
+          url: "https://centos.pkgs.org/7/nginx-x86_64/nginx-1.16.1-1.el7.ngx.x86_64.rpm.html"
+          dest: /tmp/nginx-1.16.1-1.el7.ngx.x86_64.rpm
+
+
+    - name: yum install downloaded rpm
+      yum:
+          name: /tmp/nginx-1.16.1-1.el7.ngx.x86_64.rpm
+          state: present
