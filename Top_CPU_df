@@ -1,0 +1,16 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  tasks:
+    
+      - name: Get top 5 cpu consuming processes 
+        shell: ps aux | sort -nrk 3,3 | head -n 5
+        register: top
+
+      - name: Get disk partition info
+        shell: df -hT
+        register: df
+
+      - debug: var=top.stdout_lines
+      - debug: var=df.stdout_lines
