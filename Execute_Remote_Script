@@ -1,0 +1,14 @@
+---
+- name: Copy and execute a script.
+  hosts: webservers
+  remote_user: user1
+  become: yes
+  tasks:
+      - name: Copy local script to remote systems
+        copy:
+           src: myscript.sh
+           dest: /home/user1/myscript.sh
+           mode: 0777
+
+      - name: Execute a script on remote server
+        command: sh /home/user1/myscript.sh
