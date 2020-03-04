@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  tasks:
+      - name: ensure service state running
+        service:
+             name: kdump.service
+             state: started
