@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ hosts_prompt }}"
   remote_user: root
   become: true
   tasks:
