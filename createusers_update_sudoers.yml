@@ -1,0 +1,35 @@
+- hosts: all
+  remote_user: root
+  become: true
+  vars:
+    users:
+      - "shiva"
+      - "rama"
+
+  tasks:
+
+    - name: create user shiva & rama  on remote host
+      user: 
+        name : "{{ item }}"
+        password: Blore123
+        group: "wheel"
+        update_password: always
+      register: user_created
+      with_items: "{{ users }}"
+
+
+    - name: add user Shiva to sudoers
+      lineinfile:
+        path: /etc/sudoers.d/shiva
+        line: 'shiva ALL=(ALL) NOPASSWD: ALL'
+        state: present
+        mode: 0440
+        create: yes
+    
+    - name: add user rama to sudoers
+      lineinfile:
+         path: /etc/sudoers.d/rama
+         line: 'rama ALL=(ALL) NOPASSWD: ALL'
+         state: present
+         mode: 0440
+         create: yes
