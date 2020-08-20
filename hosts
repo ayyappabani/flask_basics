@@ -1,7 +1,9 @@
+[hosts]
 host1
 host2
 host3
 host4
 
+[webs]
 web1
 web2
