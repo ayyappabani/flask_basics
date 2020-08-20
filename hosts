@@ -1,9 +1,7 @@
-[hosts]
 host1
 host2
 host3
 host4
 
-[webservers]
 web1
 web2
