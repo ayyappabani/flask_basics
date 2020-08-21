@@ -1,3 +1,4 @@
+---
 - name: Patch OS playbook
   hosts: all
   tasks:
