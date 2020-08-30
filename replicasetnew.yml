@@ -1,11 +1,20 @@
----
-- name: Patch install 
-  hosts: all
-  become: yes
-
-  tasks:
-
-  - name: upgrade all packages
-    yum:
-      name: '*'
-      state: latest
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-replicaset
+  labels:
+    app: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 3
+  template:
+    metadata:
+      name: nginx-2
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
