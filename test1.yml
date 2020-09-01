@@ -6,6 +6,4 @@
  
   - name: copy file
     command: cp https://github.com/ayyappabani/flask_basics/blob/master/createfile1.yml /tmp
-  - name: Run Kubectl
-    command: kubectl create -f /tmp/replicaset1.yml
 
