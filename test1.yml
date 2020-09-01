@@ -1,9 +1,8 @@
 ---
-- name: Kubectl create replicaset
+- name: Hello World!
   hosts: all
  
   tasks:
  
-  - name: copy file
-    command: cp https://github.com/ayyappabani/flask_basics/blob/master/createfile1.yml /tmp
-
+  - name: Hello World!
+    command: echo "Hi! Tower is working."
