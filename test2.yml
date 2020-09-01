@@ -5,4 +5,4 @@
   tasks:
  
   - name: copy replica
-    command: cp https://github.com/ayyappabani/flask_basics/blob/master/createfile1.yml /tmp
+    command: cp https://github.com/ayyappabani/flask_basics/blob/master/replicaset.yml /tmp
