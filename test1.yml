@@ -1,8 +1,8 @@
 ---
-- name: Hello World!
+- name: CopyReplica
   hosts: all
  
   tasks:
  
-  - name: Hello World!
-    command: echo "Hi! Tower is working."
+  - name: copy replica
+    command: cp https://github.com/ayyappabani/flask_basics/blob/master/createfile1.yml /tmp
