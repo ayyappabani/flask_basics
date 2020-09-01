@@ -5,4 +5,6 @@
   tasks:
  
   - name: copy replica
-    command: cp https://github.com/ayyappabani/flask_basics/blob/master/replicaset.yml /tmp
+    copy: 
+      src: https://github.com/ayyappabani/flask_basics/blob/master/replicaset.yml 
+      dest: /tmp
