@@ -1,0 +1,7 @@
+
+---
+- name: Scale replicaset
+  hosts: all
+  tasks:
+    - name: Scale Replicaset
+      shell: kubectl scale --replicas=3 deployment myapp-deployment
