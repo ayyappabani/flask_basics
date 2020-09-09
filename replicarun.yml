@@ -1,0 +1,9 @@
+
+---
+- name: Replica run!
+  hosts: all
+ 
+  tasks:
+ 
+  - name: Replica run!
+    command: kubectl create -f /tmp/replicaset1.yml
