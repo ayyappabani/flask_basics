@@ -1,0 +1,12 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  vars:
+    service_name: 'service_name'
+  
+  tasks:
+      - name: ensure service state running ---new1
+        service:
+             name: "{ service_name }"
+             state: started
