@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  tasks:
+    - name: install single package using package module
+      yum:
+        name: "{{ pkg_name }}"
+        state: present
