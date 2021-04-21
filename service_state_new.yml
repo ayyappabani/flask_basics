@@ -6,5 +6,5 @@
   tasks:
       - name: ensure service state running ---new
         service:
-             name: "{ servive_name }"
+             name: "{ service_name }"
              state: started
