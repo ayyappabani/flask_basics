@@ -3,7 +3,7 @@
   remote_user: root
   become: true
   vars:
-    service_name: "{ service_name }"
+    service_name: "{ kdump.service }"
   
   tasks:
       - name: ensure service state running---
