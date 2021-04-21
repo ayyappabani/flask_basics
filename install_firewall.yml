@@ -6,4 +6,4 @@
     - name: install single package using package module
       yum:
         name: "{{ pkg_name }}"
-        state: present
+        state: installed
