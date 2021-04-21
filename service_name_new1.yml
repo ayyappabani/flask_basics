@@ -8,5 +8,5 @@
   tasks:
       - name: ensure service state running ---
         service:
-             name: "{ service_name }"
+             name: kdump.service
              state: started
