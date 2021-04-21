@@ -2,11 +2,3 @@
 - hosts: all
   remote_user: root
   become: true
-  vars:
-    service_name: "{ service_name }"
-  
-  tasks:
-      - name: ensure service state running ---
-        service:
-             name: "{ service_name }"
-             state: started
