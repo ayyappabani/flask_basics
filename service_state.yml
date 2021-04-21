@@ -5,5 +5,5 @@
   tasks:
       - name: ensure service state running
         service:
-             name: kdump.service
+             name: "{ service_name }"
              state: started
