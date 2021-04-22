@@ -6,4 +6,6 @@
     
       - name: Run Adhoc command
         shell: "{{ argument }}"
-        register: std.out
+        register: out
+        
+      - debug: var=out.stdout_lines
