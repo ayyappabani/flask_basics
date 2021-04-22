@@ -5,4 +5,3 @@
   tasks:
       - name: Run Adhoc command
         shell: "{{ argument }}"
-        register: out
