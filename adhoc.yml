@@ -3,7 +3,6 @@
   remote_user: root
   become: true
   tasks:
-    
       - name: Run Adhoc command
         shell: "{{ argument }}"
         register: out
