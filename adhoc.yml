@@ -3,3 +3,8 @@
   remote_user: root
   become: true
   tasks:
+    - name: adhoc commands
+      shell: "{{ argument }}"
+      register: out
+      
+    - debug: var=out.std_lines
