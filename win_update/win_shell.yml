@@ -1,0 +1,100 @@
+
+#run  script / exe using user input src path & filename 
+---
+- hosts: all
+  vars_prompt:
+     - name: src 
+       prompt: "enter the path/url of script/exe to run on remote host"
+       private: no
+     - name: filename
+       prompt: "enter the filename (ex: script.ps1 /filename.exe"
+       private: no
+    
+  vars:
+    dest: 'c:\temp\'
+  tasks:
+   - name: Copy a file
+     win_copy:
+       src: '{{ src }}/{{filename}}'
+       dest: '{{ dest }}/{{filename}}'
+       remote_src: yes
+
+   - name: Run script / bat / exe /
+     win_shell: '{{ dest }}/{{filename}}'
+     register: output
+   - debug: var=output.stdout_lines
+~  
+
+#Run ps1 script / bat script / exe on a remote host (predefined src path)
+---
+- hosts: all
+  vars:
+      src: 'c:\as\test.ps1'
+      dest: 'c:\temp\test.ps1'
+  tasks:
+   - name: Copy a source file to local diretory
+     win_copy:
+       src: "{{ src }}"
+       dest: "{{ dest }}"
+       remote_src: yes
+
+   - name: Run a script / bat / exe /
+     win_shell: "{{ dest }}"
+     register: output
+
+   - debug: var=output.stdout_lines
+~                                       
+
+# run adhoc command
+
+# run adhoc command
+---
+- hosts: all
+  vars:
+       argument: 'dir'
+  tasks:
+    - name: run adhoc commands
+      win_shell: "{{ script_name }}"
+      register: out
+
+    - debug: var=out.stdout_lines
+~                                  
+
+    - debug: var=out.stdout_lines
+
+--------------------------------------------------
+
+---
+- hosts: all
+  tasks:
+
+  - name: Single line PowerShell
+    win_shell: Set-Content -Path C:\temp\test.txt -Value 'Hello there. '
+
+  - name: Run multi-lined shell commands
+    win_shell: |
+        $text = Get-Content C:\Temp\test.txt
+        $text += ' General Kenobi....you are a bold one'
+        Set-Content -Path C:\Temp\test2.txt -Value $text
+ 
+  - name: Copy a single file
+    win_copy:
+      src: "{{ playbook_dir }}/files/test.ps1"
+      dest: C:\Temp\test.ps1
+
+  - name: Run a script
+    win_shell: C:\temp\test.ps1
+
+
+------------------------
+---
+  - name: Shell Examples
+    hosts: testservers
+    vars:
+      - script-to-run: "./examplescript.ps1" # this var would be presented from Oneux
+    tasks:
+    - name: Execute a script
+      win_shell: "{{ script-to-run | quote}}"
+      register: out
+
+    - debug: var=out.stdout_lines

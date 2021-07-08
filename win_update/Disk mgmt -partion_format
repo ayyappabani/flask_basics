@@ -1,0 +1,99 @@
+# Disk mgmt ( Initialize disk, create partion, format disk)
+# provide vars: [disk_nmuber, disk_letter]
+# Ingore if disk already Initialize
+# do not format existing disk
+# extend remaining size of disk to full
+
+---
+- hosts: all
+  gather_facts: yes
+  vars:
+    #disk_number: 2
+    drive_letter: "N"
+    partition_size: '100 mb'
+
+  tasks:
+   - name: Get disk facts
+     win_disk_facts:
+
+   - name: Initialize Disk
+     win_shell: Get-Disk | Where-Object OperationalStatus –Eq 'offline' | Initialize-Disk  
+     #when: ansible_disks[disk_number].guid is none
+     ignore_errors: true
+     #no_log: True
+   - name: Create Partition using all available space
+     win_partition:
+      offline: false
+      read_only: no
+      disk_number: "{{ item.disk_number }}"
+      drive_letter: "{{ drive_letter }}"
+      partition_size: "{{ partition_size }}"
+     loop:
+       - disk_number: 1
+       - disk_number: 2
+       - disk_number: 3
+     ignore_errors: true
+     #when: ansible_disks[disk_number].guid is none
+     #no_log: True
+
+
+   - name: Format the partition as NTFS and label it
+     win_format:
+      drive_letter: "{{ drive_letter }}"
+      file_system: NTFS
+      new_label: Data
+     #when: ansible_disks[disk_number].guid is none
+     ignore_errors: true
+     #no_log: True
+
+   - name: get disk information
+   # win_shell: get-volume
+     win_shell: Get-Partition | Where-Object -FilterScript {$_.Type -ne "reserved"}
+     register: disk_info
+   - debug: var=disk_info.stdout_lines
+
+
+   #############
+---
+- hosts: all
+  gather_facts: yes
+  vars:
+    disk_number: 2
+    drive_letter: "J"
+    partition_size: '200 mb'
+
+  tasks:
+   - name: Get disk facts
+     win_disk_facts:
+
+   - name: Initialize Disk
+     win_shell: "Initialize-Disk -Number {{ disk_number }}"
+     when: ansible_disks[disk_number].guid is none
+     ignore_errors: true
+#    no_log: True
+   - name: Create Partition using all available space
+     win_partition:
+      offline: false
+      read_only: no
+      disk_number: "{{ disk_number }}"
+      drive_letter: "{{ drive_letter }}"
+      partition_size: "{{ partition_size }}"
+     ignore_errors: true
+     #when: ansible_disks[disk_number].guid is none
+     #no_log: True
+
+
+   - name: Format the partition as NTFS and label it
+     win_format:
+      drive_letter: "{{ drive_letter }}"
+      file_system: NTFS
+      new_label: Data
+     #when: ansible_disks[disk_number].guid is none
+     ignore_errors: true
+     #no_log: True
+
+   - name: get disk information
+   # win_shell: get-volume
+     win_shell: Get-Partition | Where-Object -FilterScript {$_.Type -ne "reserved"}
+     register: disk_info
+   - debug: var=disk_info.stdout_lines[1:-1] 

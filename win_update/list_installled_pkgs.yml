@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  tasks:
+     - name: list installed package
+       win_shell: "get-wmiobject win32_product | select name"
+       register: list
+     - debug:
+        var: list.stdout_lines

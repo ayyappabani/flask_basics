@@ -1,0 +1,54 @@
+# choco_install_package (global)
+#  ansible-playbook -i inventory  choco_install_app.yml -e "{"pkg_name": ["7z-latest", "apache_pkg"]}"
+---
+- hosts: all
+  gather_facts: no
+
+  tasks:
+   - name: install choco pack
+     win_chocolatey:
+       name: "{{ item }}"
+       state: present
+     with_items: "{{ pkg_name }}"
+
+
+
+#choco_uninstall_package (global)
+#ansible-playbook -i inventory  choco_uninstall_app.yml -e "{"pkg_name": ["7z-latest", "apache_pkg"]}"
+---
+- hosts: all
+  gather_facts: no
+
+  tasks:
+   - name: install choco pack
+     win_chocolatey:
+       name: "{{ item }}"
+       state: absent
+     with_items: "{{ pkg_name }}"
+
+
+
+#choco install / uninstall pkgs
+tasks:
+
+
+    - name: Install multiple packages
+      win_chocolatey:
+        name: "{{ choco_packages }}"
+        state: "{{ app_state }}"
+
+
+# chocolist installed pkgs
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: list choco installed packages
+      win_shell: choco list -lo --include-programs
+      register: list
+
+    - debug: var=list.stdout_lines
+~                                     
+
+
+ 

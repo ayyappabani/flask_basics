@@ -1,0 +1,22 @@
+
+#$direrctory = $psscriptroot
+$packageName = 'splunk'
+$filetype = 'msi'
+$silentArgs = '/qn LAUNCHSPLUNK=0 DISPLAY_WINDOWS_TA_DIALOG=1 AGREETOLICENSE=Yes'
+$scriptpath = $(split-path $myinvocation.mycommand.path)
+$filefullpath = join-path $scriptpath 'splunkforwarder.msi'
+
+install-chocolateypackage $packagename $filetype  $silentArgs $filefullpath
+
+
+New-Item -ItemType Directory -force  'C:\Program Files\SplunkUniversalForwarder\etc\apps\global\default'
+
+# copy config files to splunk path
+$installdir1 = split-path -path $myinvocation.mycommand.definition -parent
+copy-item $installdir1\inputs.conf 'C:\Program Files\SplunkUniversalForwarder\etc\apps\global\default' -force
+copy-item $installdir1\outputs.conf 'C:\Program Files\SplunkUniversalForwarder\etc\apps\global\default' -force
+
+#set poll server
+Set-Location 'c:/program files/SplunkUniversalForwarder/bin/'
+#command
+'splunk set deploy-poll sra-deploy-global-01.cisco.com:8089 -auth admin:changeme'

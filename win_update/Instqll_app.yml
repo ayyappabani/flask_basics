@@ -1,15 +1,14 @@
 ---
 - hosts: all
-  vars:
-    7z: 
+ 
   tasks:
-    - name: Ensure default application installed (Vim, Curl and Unzip )
+    - name: Ensure default application installed (7z, Apache, firefox )
       yum:
         name: "{{ item }}"
         state: installed
-      loop:
+      with_item:
         - 7z
         - Apache
         - Firefox
 
-     
+      

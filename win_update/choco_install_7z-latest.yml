@@ -1,0 +1,55 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: install choco client from internal  source
+      win_shell: |
+                 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('http://win2019-q3-feb/install.ps1'))
+
+
+    - name: Remove source "chocolatey"(global)
+      win_chocolatey_source:
+        name: chocolatey
+        state: absent
+
+    - name: Add source "my-repo"
+      win_chocolatey_source:
+        name: my-repo
+        source: 'http://win2019-q3-feb/chocolatey'
+
+
+----------------------------------------------
+
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: install chocolatey client from global source
+      win_chocolatey:
+        name: chocolatey
+        state: latest
+   
+    - name: Remove source "chocolatey"(global)
+      win_chocolatey_source:
+        name: chocolatey
+        state: absent
+
+    - name: Add source "my-repo" (set internal source as default)
+      win_chocolatey_source:
+        name: my-repo
+        source: 'http://win2019-q3-feb/chocolatey'
+
+
+
+--------------------------------------
+
+    - name: install 7z-latest package
+      win_chocolatey:
+        name: 7z-latest
+        state: present
+~                  
+
+    - name: uninstall 7z-latest package
+      win_chocolatey:
+        name: 7z-latest
+        state: absent        
