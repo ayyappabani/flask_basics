@@ -1,0 +1,38 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+  vars_prompt:
+    - name: pkg_name
+      prompt: enter package name
+      default: apache
+
+  tasks:
+    - name: install single package using package module
+      yum:
+        name: "{{ pkg_name }}"
+        state: installed
+        
+    - name: Download the Apache installer
+      win_get_url:
+        url:  'https://archive.apache.org/dist/httpd/binaries/win32/httpd-2.2.25-win32-x86-no_ssl.msi'
+        dest: 'C:\temp\httpd-2.2.25-win32-x86-no_ssl.msi'
+      when: var == "apache"
+
+    - name: Install Apache MSI
+      win_package:
+        path: 'C:\temp\httpd-2.2.25-win32-x86-no_ssl.msi'
+        state: present
+      when: var == "apache"
+
+    - name: Download the 7z installer
+      win_get_url:
+        url:  'https://www.7-zip.org/a/7z1701-x64.msi'
+        dest: 'C:\temp\7z.msi'
+      when: var == "7z"
+
+    - name: Install 7z MSI
+      win_package:
+        path: 'C:\Windows\System32\msiexec.exe /i C:\temp\7z.msi /qn /norestart '
+        state: present
+      when: var == "7z"

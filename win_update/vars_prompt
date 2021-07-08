@@ -1,0 +1,74 @@
+---
+- hosts: all
+  vars_prompt:
+     - name: pkg_name
+       prompt: "Which application do you want to deploy?\n1- apache\n2- 7z\n"
+       private: no
+  tasks:
+      - include_role:
+          name: apache
+        when: pkg_name == '1'
+
+      - include_role:
+          name: 7z
+        when: pkg_name == '2'
+
+
+---
+# virtual box centos /etc/ansible/install_pkg.yml
+- hosts: all
+  vars_prompt:
+     - name: pkg_name
+       prompt: "enter package name"
+       default: apache
+  tasks:
+      - include_role: 
+          name: apache 
+        when: pkg_name == 'apache'
+
+
+
+
+
+------------------------
+---
+- hosts: all
+  become: true
+  become_user: root
+
+  vars_prompt:
+    - name: pkg_name
+      prompt: enter pakage name (like vim, kdump etc)
+      default: vim
+
+  tasks:
+    - name: install pkg
+      yum:
+        name: " {{ pkg_name }}"
+        state: installed
+
+
+-----------------
+---
+- hosts: all
+  gather_facts: no
+
+  tasks:
+     - name: list installed package
+       win_shell: "get-package"
+       register: pkg_name
+     - name: debug
+       debug:
+            var: pkg_name.stdout_lines
+     - name: Package name to uninstll
+       pause:
+             prompt: enter package_name (copy-paste from above list)
+       register: prompt
+
+     - name: uninstll package
+       win_shell: |
+        Get-Package -Name "{{ prompt.user_input }}" | Uninstall-Package
+     - debug:
+         msg: "{{ prompt.user_input }}"
+~                                         
+
