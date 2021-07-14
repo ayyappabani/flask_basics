@@ -1,0 +1,9 @@
+#gather_facts for OneUx
+---
+- hosts: all
+  tasks:
+    - name: gather facts
+      setup:
+       fact_path: 'c:\cust_facts'
+      register: facts
+    - debug: var=facts
