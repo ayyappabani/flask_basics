@@ -1,0 +1,59 @@
+---
+- hosts: all
+  tasks:
+
+# tasks file for win_get_resource_utilization
+  - name: copy script file 
+    win_copy:
+       src: '../files/get_resources.ps1'
+       dest: 'c:\script\get_resources.ps1'
+
+  - name: Get CPU/Memory/Disk resources utilization
+    win_shell: c:\script\get_resources.ps1
+    register: output
+  - debug: var=output.stdout_lines
+~                                      
+
+
+## win_get_resource_utilization.yml 
+---
+- hosts: all
+  gather_facts: yes
+  roles:
+     - win_get_resource_utilization
+
+
+
+###   get_resources.ps1  
+
+    function Get-Resources{  
+                 param(  
+                 $computername =$env:computername 
+                 )  
+                 # Processor utilization 
+                 #Get-WmiObject -ComputerName $computer -Class win32_processor -ErrorAction Stop | Measure-Object -Property LoadPercentage -Average | Select-Object * 
+                $cpu = gwmi win32_perfformatteddata_perfos_processor -ComputerName $computername| ? {$_.name -eq "_total"} | select -ExpandProperty PercentProcessorTime  -ea silentlycontinue  
+                 # Memory utilization 
+                 $ComputerMemory = Get-WmiObject -ComputerName $computername  -Class win32_operatingsystem -ErrorAction Stop 
+                 $Memory = ((($ComputerMemory.TotalVisibleMemorySize - $ComputerMemory.FreePhysicalMemory)*100)/ $ComputerMemory.TotalVisibleMemorySize) 
+                 $RoundMemory = [math]::Round($Memory, 2) 
+                 # Free disk space 
+                 $disks = get-wmiobject -class "Win32_LogicalDisk" -namespace "root\CIMV2" -computername $computername
+                 $results = foreach ($disk in $disks)  
+                 { 
+                 if ($disk.Size -gt 0) 
+                 { 
+                   $size = [math]::round($disk.Size/1GB, 0) 
+                   $free = [math]::round($disk.FreeSpace/1GB, 0) 
+                   [PSCustomObject]@{ 
+                   Drive = $disk.Name 
+                   Name = $disk.VolumeName 
+                   "Total Disk Size" = $size
+                   "Free Disk Size" = "{0:N0} ({1:P0})" -f $free, ($free/$size) 
+                   } } }     
+ 
+                   # Write results
+                   Write-host "Resources on" $computername "- RAM Usage:"$RoundMemory"%, CPU:"$cpu"%, Free(SystemDisk)" "$free" "GB"
+                   }
+
+                   Get-Resources | ConvertTo-Json
