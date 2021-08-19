@@ -1,0 +1,35 @@
+##hard_boot_ after row 27###
+
+  - name: waiting for server to come back online
+    wait_for_connection:
+      delay: 30
+      timeout: 480
+    register: hard_wait_for_host
+    ignore_errors: true
+
+  - debug:
+      var: hard_wait_for_host
+
+  - fail:
+      msg:
+        - "Host reboot initiated but timeout reached waiting for ping access. Please check server console"
+    when: hard_wait_for_host.failed == true
+
+  - name: checking the server uptime
+    win_shell: 'systeminfo | find "Boot Time"' 
+    register: hard_uptime_out
+    ignore_errors: true
+    #delegate_to: 127.0.0.1
+
+  - name: getting uptime after
+    win_shell: (get-date) - (gcim Win32_OperatingSystem).LastBootUpTime |select "TotalSeconds" 
+    register: hard_uptime_secs_after
+    ignore_errors: true
+    #delegate_to: 127.0.0.1
+
+  - debug:
+      msg:
+        - "Uptime: {{ hard_uptime_out.stdout_lines }}"
+        - "Uptime in secs: {{ hard_uptime_secs_after.stdout }}"
+
+
