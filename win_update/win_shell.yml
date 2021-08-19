@@ -1,5 +1,22 @@
 
 #run  script / exe using user input src path & filename 
+
+(venv3) bash-4.2$ cat runascript/tasks/main.yml 
+---
+# tasks file for runascript--working one--
+   - name: copy  script
+     win_copy:
+      src: '../files/test.ps1'
+      dest: 'c:\temp\'
+     ignore_errors: yes
+
+   - name: Run script / bat / exe /
+     win_shell: 'c:\temp\test.ps1'
+     register: output
+
+   - debug: var=output.stdout_lines
+
+   ##################
 ---
 - hosts: all
   vars_prompt:

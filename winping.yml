@@ -6,3 +6,7 @@
   tasks:
   - name: ping
     ping:
+
+
+#
+#msg: "{{ results.stdout | trim }}"

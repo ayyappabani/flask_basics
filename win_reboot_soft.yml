@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: getting uptime before
+      win_shell: '(get-date) - (gcim Win32_OperatingSystem).LastBootUpTime |select "TotalSeconds"'
+      register: uptime_secs_before
+    - debug:
+        msg: "Uptime on host before any reboot {{uptime_secs_before.stdout_lines}}"
+
+    - name: Rebooting the server gracefully
+      win_reboot:
+        reboot_timeout: 480
+        pre_reboot_delay: 10
+        post_reboot_delay: 30
+
+    - name: checking the server uptime
+      win_shell: '(get-date) - (gcim Win32_OperatingSystem).LastBootUpTime |select "TotalSeconds"'
+      register: uptime_secs_after
+    - debug:
+        msg: "Uptime on host after reboot {{uptime_secs_after.stdout_lines}}"
+    
+#    - name: 
+#        msg: "fatal: [{{ inventory_hostname }}]: reboot failed. Host not responding to graceful reboot request. Trying for hard power reset..."
+#     when: uptime_secs_after.stdout |int > uptime_secs_before.stdout |int

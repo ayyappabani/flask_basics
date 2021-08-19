@@ -1,0 +1,7 @@
+
+$site = Get-Content -Path C:\as\sites.txt 
+
+If ($site -eq 'rtp') {c:\as\rtp.cmd}
+ElseIf  ($site -eq 'Alln') {c:\as\rtp.cmd}
+ElseIf ($site -eq 'rcd') {c:\as\rtp.cmd}
+Else {default.cmd}
