@@ -1,0 +1,28 @@
+#$packageName = 'netbackup'
+
+$scriptPath =  $(Split-Path $MyInvocation.MyCommand.Path)
+#$fileFullPath = Join-Path -path "$scriptPath" -childpath "\netbackup\64"
+#$fileFullPath = $toolsdir\netbackup\64\' 
+$fileFullPath = Join-Path $scriptPath  '\netbackup\64'
+ 
+
+
+$site = Get-Content -Path C:\as\sites.txt
+
+If ($site -eq "rtp") {cmd /c "$fileFullPath\rtp.cmd"}
+ ElseIf ($site -eq "rcd") {cmd /c "$fileFullPath\rcd.cmd"}
+Else {cmd /c "$fileFullPath\default.cmd"}
+
+
+
+#packageargs 
+$toolsdir  
+
+#$direrctory = $psscriptroot
+$packageName = 'splunk'
+$filetype = 'msi'
+$silentArgs = '/qn LAUNCHSPLUNK=0 DISPLAY_WINDOWS_TA_DIALOG=1 AGREETOLICENSE=Yes'
+$scriptpath = $(split-path $myinvocation.mycommand.path)
+$filefullpath = join-path $scriptpath 'splunkforwarder.msi'
+
+install-chocolateypackage $packagename $filetype  $silentArgs $filefullpath

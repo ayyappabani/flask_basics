@@ -1,0 +1,27 @@
+
+############   Exp 1 ###########
+$site = Get-Content -Path C:\as\sites.txt 
+
+If ($site -eq 'rtp') {c:\as\rtp.cmd}
+ElseIf  ($site -eq 'Alln') {c:\as\rtp.cmd}
+ElseIf ($site -eq 'rcd') {c:\as\rtp.cmd}
+Else {default.cmd}
+
+############   Exp 2 ###########
+
+#$packageName = 'netbackup'
+
+$scriptPath =  $(Split-Path $MyInvocation.MyCommand.Path)
+#$fileFullPath = Join-Path -path "$scriptPath" -childpath "\netbackup\64"
+$fileFullPath = Join-Path $scriptPath  '\netbackup\64'
+
+$site = Get-Content -Path C:\as\sites.txt
+
+If ($site -eq "rtp") {cmd /c "$fileFullPath\rtp.cmd"}
+ ElseIf ($site -eq "rcd") {cmd /c "$fileFullPath\rcd.cmd"}
+Else {cmd /c "$fileFullPath\default.cmd"}
+
+
+
+
+
