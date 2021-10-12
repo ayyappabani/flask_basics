@@ -1,5 +1,24 @@
+# netback install yml 
+---
+- hosts: all
+  vars: 
+       site: 'rtp'
+  tasks:
 
-############   Exp 1 ###########
+
+    - name: add site to txt file
+      win_shell: Set-Content -Path C:\flats\site.txt -Value '{{ site }}'
+
+    - name: install netbackup client 
+      win_chocolatey:
+           name: netbackup
+           state: present
+
+
+
+
+
+############   chocolateyinstall.ps1 Exp 1 ###########
 $site = Get-Content -Path C:\as\sites.txt 
 
 If ($site -eq 'rtp') {c:\as\rtp.cmd}
@@ -7,7 +26,7 @@ ElseIf  ($site -eq 'Alln') {c:\as\rtp.cmd}
 ElseIf ($site -eq 'rcd') {c:\as\rtp.cmd}
 Else {default.cmd}
 
-############   Exp 2 ###########
+############   chocolateyinstall.ps  Exp 2 ###########
 
 #$packageName = 'netbackup'
 
@@ -18,8 +37,11 @@ $fileFullPath = Join-Path $scriptPath  '\netbackup\64'
 $site = Get-Content -Path C:\as\sites.txt
 
 If ($site -eq "rtp") {cmd /c "$fileFullPath\rtp.cmd"}
+    Else ($site -eq "allen") {cmd /c "$fileFullPath\allen.cmd"}
+    Else ($site -eq "sjc") {cmd /c "$fileFullPath\sjc.cmd"}
  ElseIf ($site -eq "rcd") {cmd /c "$fileFullPath\rcd.cmd"}
 Else {cmd /c "$fileFullPath\default.cmd"}
+
 
 
 
