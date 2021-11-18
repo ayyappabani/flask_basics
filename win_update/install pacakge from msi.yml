@@ -1,0 +1,26 @@
+install pacakge from msi
+https://stackoverflow.com/questions/35403769/how-to-read-json-file-using-ansible 
+I have a json file in the same directory where my ansible script is. Following is the content of json file:
+
+
+{ "resources":[
+           {"name":"package1", "downloadURL":"path-to-file1" },
+           {"name":"package2", "downloadURL": "path-to-file2"}
+   ]
+}
+
+---
+- hosts: localhost
+  vars:
+    package_dir: "/var/opt/"
+    version_file: "{{ lookup('file','/home/shasha/devOps/tests/packageFile.json') | from_json }}"
+
+  tasks:
+    - name: Printing the file.
+      debug: msg="{{version_file}}"
+
+    - name: Downloading the packages.
+      get_url: url="{{item.downloadURL}}" dest="{{package_dir}}" mode=0777
+      with_items: version_file.resources
+
+

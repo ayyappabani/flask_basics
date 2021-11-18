@@ -6,7 +6,6 @@ $scriptPath =  $(Split-Path $MyInvocation.MyCommand.Path)
 $fileFullPath = Join-Path $scriptPath  '\netbackup\64'
  
 
-
 $site = Get-Content -Path C:\as\sites.txt
 
 If ($site -eq "rtp") {cmd /c "$fileFullPath\rtp.cmd"}

@@ -9,8 +9,8 @@
       win_shell: |
                   Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://engci-maven-master.cisco.com/artifactory/list/Chocolatey-nuget/install.ps1'))
    
-                  - name: Remove source "chocolatey"(global)
-      win_chocolatey_source:
+    - name: Remove source "chocolatey"(global)
+      win_chocolatey_source:  
         name: chocolatey
         state: absent
 
@@ -18,6 +18,15 @@
       win_chocolatey_source:
         name: artifact
         source: 'https://engci-maven-master.cisco.com/artifactory/api/nuget/Chocolatey-nuget/'
+        source_username: choco.gen
+        source_password: AP4nCvoGm3mHJCKCLNeppsc8PEK
+
+    - name: Add source "Artifact"-local
+      win_chocolatey_source:
+        name: artifact-local
+        source: 'https://engci-maven.cisco.com/artifactory/api/nuget/Chocolatey-nuget'
+        source_username: choco.gen
+        source_password: AP4nCvoGm3mHJCKCLNeppsc8PEK
 ~                                                                                           
 
 ---

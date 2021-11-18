@@ -67,7 +67,7 @@
 
      - name: uninstll package
        win_shell: |
-        Get-Package -Name "{{ prompt.user_input }}" | Uninstall-Package
+        Get-Package -Name "{{ prompt.user_ }}" | Uninstall-Package
      - debug:
          msg: "{{ prompt.user_input }}"
 ~                                         

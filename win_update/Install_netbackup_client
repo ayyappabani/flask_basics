@@ -45,5 +45,45 @@ Else {cmd /c "$fileFullPath\default.cmd"}
 
 
 
+# tasks file for win_netbackup  latest
 
+- name: download file to local folder
+win_get_url:
+   url: 'https://wwwin-repomgmt-nprd.cisco.com/chocolatey/7zpkg.1.0.0.nupkg'
+   dest: 'c:\flats'
+#       remote_src: True
+- name: unzip files at path "c:\flats\netbackup\x64'
+win_shell:
+         |
+           expand-archive -path 'c:\flats\netbackup.zip' -destinationpath 'c:\flats\netbackup'
+- name: add variables (masterservername, mediaservers, token no  to silentclient file
+win_lineinfile:
+  path   : 'C:\flats\netbackup\64\SilentCLientcmd_SJC.cmd'
+  regex : "{{ item.regex }}"
+  insertafter: '^REM netbackup'
+  line: "{{ item.line }}"
+with_items:
+  - {  regex: '(^MASTERSERVER=)', line: 'SET MASTERSERVER={{ masterserver_name }}'}
+  - {  regex: '<token>',   line: 'SET ADDITIONALSERVERS={{ media_servers }}'}
+  - {  regex: '<token>',   line: 'SET AUTHORIZATION_TOKEN={{ token_no }}'}
 
+- name: Run setup execution
+win_command: cmd.exe -
+args:
+     chdir: 'c:\flats\netbackup\64\'
+     stdin: 'silentclient.cmd'
+- name: Pause for 10 minutes to complete setup
+pause:
+ minutes: 3
+
+- name: Remove a file, if present
+win_file:
+  path: 'c:\flats\netbackup.zip'
+  state: absent
+
+- name: Remove directory, if present
+win_file:
+ path: 'c:\flats\netbackup\64'
+ state: absent
+~                                                                                                                                                                                                           
+~                        
