@@ -1,0 +1,50 @@
+---
+#    - set_fact:
+        masterserver_name: "my_master"
+        media_servers: "server_a, server_b, server_c"
+        FINGERPRINT: "{{CA_FINGERPRINT}}"
+        
+# tasks file for win_install_netbackup
+    - name: download file to local folder c:\flats
+      win_get_url:
+          url: 'http://markkil-vm.cisco.com/netbackup.zip'
+          dest: 'c:\flats'
+    - name: Unzip the netbackup installation files
+      win_unzip:
+        src: c:\flats\netbackup.zip
+        dest: c:\flats\netbackup 
+        delete_archive: yes
+
+    - name: create netbackup config file at "C:\flats\netbackup\nbu.resp"
+      win_template:
+        src: nburesp.j2
+        dest: c:\flats\netbackup\nbu.resp
+
+    - name: Installing netbackup
+      win_command: 'c:\flats\netbackup\silentclient.cmd'
+      register: output
+      
+   # - debug:
+   #   msg: "{{output}}"
+
+#-----json template
+(venv3) bash-4.2$ cat win_netbackup/templates/nburesp.j2 
+INSTALLDIR:C:\Program Files\VERITAS\
+MASTERSERVERNAME:{{masterserver_name}}
+FINGERPRINT:{{CA_FINGERPRINT}}
+ADDITIONALSERVERS:{{media_servers}}
+NETBACKUPCLIENTINSTALL:1
+SERVERS:{{masterserver_name}},{{media_servers}}
+CLIENTNAME:{{ansible_netbios_name}}
+NBSTARTTRACKER:0
+STARTUP:Automatic
+VNETD_PORT:13724
+CLIENTSLAVENAME:{{ansible_netbios_name}}
+SILENTINSTALL:1
+ISPUSHINSTALL:1
+ISCUSTOMINSTALL:1
+REBOOT:ReallySuppress
+NUMERICINSTALLTYPE:1
+STOP_NBU_PROCESSES:0
+ABORT_REBOOT_INSTALL:0
+PBXCONFIGURECS:FALSE
