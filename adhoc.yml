@@ -6,3 +6,6 @@
     - name: adhoc commands
       shell: "{{ argument }}"
       register: out
+    
+    - debug:
+        var=out.stdout
