@@ -1,15 +1,15 @@
 
 ---
 - hosts: all
-  vars:
-        filename: hostlist
-        profile_name: CentOS7-new
-        host_ipmi:
-            - 192.168.29.192
-        hosts:
-           - test1
-           - test2
-           - test3
+  #vars:
+  #     filename: hostlist
+  #     profile_name: CentOS7-new
+  #      host_ipmi:
+  #         - 192.168.29.192
+  #     hosts:
+  #        - test1
+  #        - test2
+  #        - test3
 
   tasks:
     - name: read file
@@ -36,7 +36,6 @@
     - name: update server override to profile
       shell: cobbler profle edit --name=CentOS7-new --server={{cobbler_master}}
       ignore_errors: True
-
 
     - name: sync cobbler
       shell: cobbler sync
