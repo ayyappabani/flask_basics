@@ -1,0 +1,58 @@
+
+---
+- hosts: all
+  vars:
+        filename: hostlist
+        profile_name: CentOS7-new
+        host_ipmi:
+            - 192.168.29.192
+        hosts:
+           - test1
+           - test2
+           - test3
+
+  tasks:
+    - name: read file
+      copy:
+        src: /tmp/{{filename}}
+        dest: /root/bin/
+
+    - name: remove existing system profile
+      shell: cobbler system remove --name={{item}}
+      ignore_errors: True
+      with_items:
+           - "{{hosts}}"
+
+    - name: add host profiles
+      shell: echo {{filename }}
+      register: hostadd
+
+    - name: update system profile
+      shell: cobbler system edit --name={{item}} --profile={{profile_name}}
+      ignore_errors: True
+      with_items:
+          - "{{ hosts }}"
+
+    - name: update server override to profile
+      shell: cobbler profle edit --name=CentOS7-new --server={{cobbler_master}}
+      ignore_errors: True
+
+
+    - name: sync cobbler
+      shell: cobbler sync
+
+   # - name: set pxe and reboot host
+      # shell: bash #ipmi.sh {{ item }}
+
+    #  ignore_errors: True
+     # with_items:
+      #     - "{{host_ipmi}}"
+
+    - name: enter luks credentials
+      shell: echo {{item}}  hello
+      with_items:
+         - "{{host_ipmi}}"
+      register: status
+      until: status.stdout_lines == "success"
+      retries: 2
+      delay: 20
